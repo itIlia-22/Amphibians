@@ -1,4 +1,4 @@
-package com.example.amphibians.ui.theme
+package com.example.amphibians.ui.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

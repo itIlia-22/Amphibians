@@ -1,4 +1,4 @@
-package com.example.amphibians.ui.theme
+package com.example.amphibians.ui.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
