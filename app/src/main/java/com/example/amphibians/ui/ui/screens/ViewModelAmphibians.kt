@@ -3,15 +3,13 @@ package com.example.amphibians.ui.ui.screens
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.amphibians.AmphibiansApp
+import com.example.amphibians.AmphibiansApplication
 import com.example.amphibians.model.AmphibiansData
 import com.example.amphibians.repository.AmphibiansRepository
 import kotlinx.coroutines.launch
@@ -20,7 +18,7 @@ import java.io.IOException
 
 //UI State HomeScreen
 sealed interface AmphibiansUiState {
-    data class Success(val amphibiansData: AmphibiansData) : AmphibiansUiState
+    data class Success(val amphibiansData: List<AmphibiansData>) : AmphibiansUiState
     object Loading : AmphibiansUiState
     object Error : AmphibiansUiState
 
@@ -39,7 +37,7 @@ class ViewModelAmphibians(private val amphibiansRepository: AmphibiansRepository
     /**
      * Получает информацию из сервиса модернизации и обновляет
      */
-    private fun getAmphibians() {
+     fun getAmphibians() {
         viewModelScope.launch {
             amphibiansUiState = AmphibiansUiState.Loading
             amphibiansUiState = try {
@@ -62,7 +60,7 @@ class ViewModelAmphibians(private val amphibiansRepository: AmphibiansRepository
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[APPLICATION_KEY] as AmphibiansApp)
+                val application = (this[APPLICATION_KEY] as AmphibiansApplication)
                 val amphibiansRepository = application.container.amphibiansRepository
                 ViewModelAmphibians(amphibiansRepository = amphibiansRepository)
             }

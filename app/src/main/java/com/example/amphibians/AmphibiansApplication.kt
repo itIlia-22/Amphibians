@@ -7,7 +7,7 @@ import com.example.amphibians.repository.DefaultAppContainer
 /**
  * Экземпляр AppContainer, используемый остальными классами для получения зависимостей
  */
-class AmphibiansApp : Application() {
+class AmphibiansApplication : Application() {
 
     lateinit var container: AppContainer
     override fun onCreate() {

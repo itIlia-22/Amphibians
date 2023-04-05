@@ -5,16 +5,17 @@ import com.example.amphibians.network.AmphibiansApiService
 
 //Репозиторий, который извлекает список
 interface AmphibiansRepository {
-    suspend fun getAmphibians(): AmphibiansData
+    suspend fun getAmphibians():List<AmphibiansData>
 }
 
 //Сетевая реализация репозитория, который извлекает список
 class NetworkAmphibiansRepository(
     private val amphibiansApiService: AmphibiansApiService
 ) : AmphibiansRepository {
-    override suspend fun getAmphibians(): AmphibiansData {
-        //Извлекае данные из ApiAmp
-        return amphibiansApiService.getAmphibians()
-    }
+    //Извлекае данные из ApiAmp
+    override suspend fun getAmphibians(): List<AmphibiansData> = amphibiansApiService.getAmphibians()
+
+
+
 
 }
