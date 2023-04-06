@@ -1,5 +1,6 @@
 package com.example.amphibians.ui.ui.screens
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,10 +10,11 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,10 +73,11 @@ fun CardAmphibians(amphibiansData: AmphibiansData, modifier: Modifier = Modifier
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             DescAmphibians(
-                desc = amphibiansData.description,
                 name = amphibiansData.name,
-                type = amphibiansData.type
-            )
+                type = amphibiansData.type,
+                desc = amphibiansData.description,
+
+                )
             ImageAmphibians(amphibiansData = amphibiansData)
         }
 
@@ -85,18 +88,28 @@ fun CardAmphibians(amphibiansData: AmphibiansData, modifier: Modifier = Modifier
 fun DescAmphibians(
     desc: String,
     name: String,
-    type: String
+    type: String,
+    modifier: Modifier = Modifier
 ) {
 //имя и описание амфибии
-    Column {
-        Text(desc)
-        Text(name)
-        Text(type)
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(name, modifier = modifier.padding(16.dp))
+        Text(type, modifier = modifier.padding(16.dp))
+        Text(
+            desc,
+            modifier = modifier.padding(end = 16.dp, top = 8.dp, start = 16.dp, bottom = 16.dp)
+        )
+
     }
 }
 
 @Composable
-fun ImageAmphibians(modifier: Modifier = Modifier, amphibiansData: AmphibiansData) {
+fun ImageAmphibians(
+    modifier: Modifier = Modifier,
+    amphibiansData: AmphibiansData,
+) {
+
+
 //Изображение
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
@@ -104,9 +117,13 @@ fun ImageAmphibians(modifier: Modifier = Modifier, amphibiansData: AmphibiansDat
             .crossfade(true)
             .build(),
         contentDescription = null,
-        contentScale = ContentScale.Crop,
+        contentScale = ContentScale.FillWidth,
         error = (painterResource(id = R.drawable.ic_error)),
-        placeholder = (painterResource(id = R.drawable.ic_loading))
+        placeholder = (painterResource(id = R.drawable.ic_loading)),
+
+        modifier = modifier
+            .fillMaxWidth()
+
 
     )
 }
@@ -127,13 +144,30 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+fun LoadingScreen(
+    modifier: Modifier = Modifier,
+    animationDuration: Int = 1000,
+) {
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val rotateAnimation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = animationDuration,
+                easing = LinearEasing
+            )
+        )
+    )
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
         Image(
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier
+                .size(200.dp)
+                .rotate(degrees = rotateAnimation),
             painter = painterResource(R.drawable.ic_loading),
             contentDescription = null
         )

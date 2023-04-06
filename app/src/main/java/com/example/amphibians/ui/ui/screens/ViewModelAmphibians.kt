@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.amphibians.AmphibiansApplication
 import com.example.amphibians.model.AmphibiansData
 import com.example.amphibians.repository.AmphibiansRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -37,9 +38,11 @@ class ViewModelAmphibians(private val amphibiansRepository: AmphibiansRepository
     /**
      * Получает информацию из сервиса модернизации и обновляет
      */
-     fun getAmphibians() {
+    fun getAmphibians() {
         viewModelScope.launch {
             amphibiansUiState = AmphibiansUiState.Loading
+            // Для просмотра анимации
+           // delay(3000)
             amphibiansUiState = try {
                 AmphibiansUiState.Success(
                     amphibiansRepository.getAmphibians()
